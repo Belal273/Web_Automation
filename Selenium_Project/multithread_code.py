@@ -6,6 +6,8 @@ import time
 import threading
 import pandas as pd
 
+from bs4 import BeautifulSoup as bs
+
 # Function to control a browser instance
 def control_browser(username, password, profiles_array):
     driver = webdriver.Chrome()
@@ -55,7 +57,7 @@ def control_browser(username, password, profiles_array):
     # ## Debugging for one profile only 
 
     # Navigate to client profile page
-    driver.get(f"https://www.instagram.com/{profiles_array[6][0]}/")
+    driver.get(f"https://www.instagram.com/{profiles_array[1][0]}/")
     
     # Wait for the page to load and be visible (adjust the sleep time as necessary)
     time.sleep(20)
@@ -127,11 +129,11 @@ def control_browser(username, password, profiles_array):
         print(f"An error occurred: {e}")
 
     try:
-        time.sleep(10)
+        time.sleep(15)
         # Locate the most recent Instagram post using the post grid
         # Instagram posts are usually inside <a> tags with an <img> inside
         # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
-        comment_area = driver.find_element(By.XPATH, "//textarea[contains(@class, 'xvbhtw8 ')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+        comment_area = driver.find_element(By.XPATH, "//textarea[contains(@class, 'xvbhtw8 ')]") # Working # MORE STABLE
 
         # Click on the most recent post
         comment_area.send_keys("letter")
@@ -146,21 +148,209 @@ def control_browser(username, password, profiles_array):
 
     # try:
     #     time.sleep(10)
+    #     like = driver.find_element(By.XPATH, "//div[contains(@class, 'x6s0dn4 ')]")
+    #     soup = bs(like.get_attribute('innerHTML'),'html.parser')
+    #     if(soup.find('svg')['aria-label'] == 'Like'):
+    #         like.click()
+
+
+    #     print(" Liked from Soup")
+
+    # except Exception as e:
+    #     print(f"An error occurred: {e}")
+
+    try:
+        print("  x6s0dn4 ")
+        time.sleep(10)
+        # Locate the most recent Instagram post using the post grid
+        # Instagram posts are usually inside <a> tags with an <img> inside
+        # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+        # driver.find_element(By.XPATH, "//div[contains(@class, 'x1i10hfl x972fbf')]").click() # Must have Role Button 
+        # time.sleep(10)
+        # print(" Liked 1 ")
+
+        # # Click on the most recent post
+        # driver.find_element(By.XPATH, "//div[contains(@class, 'x1i10hfl x972fbf xcfux6l x1qhh985 xm0m39n x9f619 xe8uvvx xdj266r x11i5rnm xat24cr x1mh8g0r x16tdsg8 x1hl2dhg xggy1nq x1a2a7pz x6s0dn4 xjbqb8w x1ejq31n xd10rxx x1sy0etr x17r0tee x1ypdohk x78zum5 xl56j7k x1y1aw1k x1sxyh0 xwib8y2 xurb0ha xcdnw81')]").click()
+        # time.sleep(10)
+        # print(" Liked 2 ")
+
+        driver.find_element(By.XPATH,"//div[contains(@class, 'x1i10hfl x972fbf']//*[@role='button']").click() # Must have Role Button 
+        print(" Liked 3 ")
+
+        # Wait to see the post after clicking
+        time.sleep(5)  # Adjust time as needed for observation
+
+        print(" Liked x6s0dn4 ")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    # try:
+    #     time.sleep(10)
     #     # Locate the most recent Instagram post using the post grid
     #     # Instagram posts are usually inside <a> tags with an <img> inside
     #     # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
-    #     comment_area = driver.find_element(By.XPATH, "//div[contains(@class, 'xdj266r  ')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+    #     LIKE_AREA = driver.find_element(By.XPATH, "//*[contains(@class, 'x78zum5 ')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
 
     #     # Click on the most recent post
-    #     comment_area.send_keys("letter")
+    #     LIKE_AREA.click()
 
     #     # Wait to see the post after clicking
     #     time.sleep(5)  # Adjust time as needed for observation
 
-    #     print(" Located Comment 4")
+    #     print(" Liked *")
+
+    # except Exception as e:
+    #     print(f"An error occurred: ")
+
+    # try:
+    #     time.sleep(10)
+    #     # Locate the most recent Instagram post using the post grid
+    #     # Instagram posts are usually inside <a> tags with an <img> inside
+    #     # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+    #     LIKE_AREA = driver.find_element(By.XPATH, "//[contains(@class, 'x78zum5 ')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+    #     # Click on the most recent post
+    #     LIKE_AREA.click()
+
+    #     # Wait to see the post after clicking
+    #     time.sleep(5)  # Adjust time as needed for observation
+
+    #     print(" Liked None ")
+
+    # except Exception as e:
+    #     print(f"An error occurred: ")
+
+
+
+
+     
+    # try:
+    #     time.sleep(10)
+    #     # Locate the most recent Instagram post using the post grid
+    #     # Instagram posts are usually inside <a> tags with an <img> inside
+    #     # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+    #     LIKE_AREA = driver.find_element(By.XPATH, "//svg[contains(@class, 'x1n2onr6 ')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+    #     # Click on the most recent post
+    #     LIKE_AREA.click()
+
+    #     # Wait to see the post after clicking
+    #     time.sleep(5)  # Adjust time as needed for observation
+
+    #     print(" Liked 2")
 
     # except Exception as e:
     #     print(f"An error occurred: {e}")
+     
+    # try:
+    #     time.sleep(10)
+    #     # Locate the most recent Instagram post using the post grid
+    #     # Instagram posts are usually inside <a> tags with an <img> inside
+    #     # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+    #     LIKE_AREA = driver.find_element(By.XPATH, "//svg[contains(@aria-label, 'Like')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+    #     # Click on the most recent post
+    #     LIKE_AREA.click()
+
+    #     # Wait to see the post after clicking
+    #     time.sleep(5)  # Adjust time as needed for observation
+
+    #     print(" Liked 3")
+
+    # except Exception as e:
+    #     print(f"An error occurred: {e}")
+
+    # try:
+    #     time.sleep(10)
+    #     # Locate the most recent Instagram post using the post grid
+    #     # Instagram posts are usually inside <a> tags with an <img> inside
+    #     # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+    #     LIKE_AREA = driver.find_element(By.XPATH, "//svg") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+    #     # Click on the most recent post
+    #     LIKE_AREA.click()
+
+    #     # Wait to see the post after clicking
+    #     time.sleep(5)  # Adjust time as needed for observation
+
+    #     print(" Liked 4")
+
+    # except Exception as e:
+    #     print(f"An error occurred: {e}")
+
+    # try:
+    #     time.sleep(10)
+    #     # Locate the most recent Instagram post using the post grid
+    #     # Instagram posts are usually inside <a> tags with an <img> inside
+    #     # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+    #     LIKE_AREA = driver.find_element(By.XPATH, "//title[contains(text(), 'Like')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+    #     # Click on the most recent post
+    #     LIKE_AREA.click()
+
+    #     # Wait to see the post after clicking
+    #     time.sleep(5)  # Adjust time as needed for observation
+
+    #     print(" Liked 5")
+
+    # except Exception as e:
+    #     print(f"An error occurred: {e}")
+
+    # try:
+    #     time.sleep(10)
+    #     # Locate the most recent Instagram post using the post grid
+    #     # Instagram posts are usually inside <a> tags with an <img> inside
+    #     # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+    #     LIKE_AREA = driver.find_element(By.XPATH, "//title[text()='Like']") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+    #     # Click on the most recent post
+    #     LIKE_AREA.click()
+
+    #     # Wait to see the post after clicking
+    #     time.sleep(5)  # Adjust time as needed for observation
+
+    #     print(" Liked 6")
+
+    # except Exception as e:
+    #     print(f"An error occurred: {e}")
+
+    # try:
+    #     time.sleep(10)
+    #     # Locate the most recent Instagram post using the post grid
+    #     # Instagram posts are usually inside <a> tags with an <img> inside
+    #     # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+    #     LIKE_AREA = driver.find_element(By.XPATH, "//div[contains(text(), 'Like')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+    #     # Click on the most recent post
+    #     LIKE_AREA.click()
+
+    #     # Wait to see the post after clicking
+    #     time.sleep(5)  # Adjust time as needed for observation
+
+    #     print(" Liked 7")
+
+    # except Exception as e:
+    #     print(f"An error occurred: {e}")
+
+    # try:
+    #     time.sleep(10)
+    #     # Locate the most recent Instagram post using the post grid
+    #     # Instagram posts are usually inside <a> tags with an <img> inside
+    #     # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+    #     LIKE_AREA = driver.find_element(By.XPATH, "//div[text()='Like']") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+    #     # Click on the most recent post
+    #     LIKE_AREA.click()
+
+    #     # Wait to see the post after clicking
+    #     time.sleep(5)  # Adjust time as needed for observation
+
+    #     print(" Liked 8")
+
+    # except Exception as e:
+    #     print(f"An error occurred: {e}")
+
     
     # try:
     #     # Locate the Message button using the provided XPath and click it
