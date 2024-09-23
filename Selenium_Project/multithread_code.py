@@ -54,11 +54,11 @@ def control_browser(username, password, profiles_array):
 #######################################################################################################
     # ## Debugging for one profile only 
 
-    # # Navigate to client profile page
-    # driver.get(f"https://www.instagram.com/{profiles_array[6][0]}/")
+    # Navigate to client profile page
+    driver.get(f"https://www.instagram.com/{profiles_array[6][0]}/")
     
-    # # Wait for the page to load and be visible (adjust the sleep time as necessary)
-    # time.sleep(20)
+    # Wait for the page to load and be visible (adjust the sleep time as necessary)
+    time.sleep(20)
 
     # try:
     #     following_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Following')]") # Working
@@ -82,6 +82,31 @@ def control_browser(username, password, profiles_array):
 
     #     except:
     #         print("Neither 'Follow' nor 'Following' button found.")
+    
+    # try:
+    #     Post = driver.find_element(By.CSS_SELECTOR, "img[type='img']") # NOT Stable  
+    #     print("Located post from first time ")
+    # except:
+    #     print("Can't locate a post ")
+    
+    
+    try:
+        time.sleep(10)
+        # Locate the most recent Instagram post using the post grid
+        # Instagram posts are usually inside <a> tags with an <img> inside
+        # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+        most_recent_post = driver.find_element(By.XPATH, "//div[contains(@class, 'aagw')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+        # Click on the most recent post
+        most_recent_post.click()
+
+        # Wait to see the post after clicking
+        time.sleep(5)  # Adjust time as needed for observation
+
+        print("Located post from SECOND time ")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
     
     # try:
@@ -179,131 +204,131 @@ def control_browser(username, password, profiles_array):
     #     print(" Error in Sending The Message") # Print more information # TO_DO
 
 #######################################################################################################
-    # Wait for a few seconds
-    time.sleep(20)
-    for i in range(len(profiles_array)):
-        try:
-            # Navigate to client profile page
-            driver.get(f"https://www.instagram.com/{profiles_array[i][0]}/")
-            # Wait for the page to load and be visible (adjust the sleep time as necessary)
-            time.sleep(15)
-            print(f"Success: Customer Profile Page {profiles_array[i][0]}, From Account {username}")
-        except:
-            print(f"Failed: Can't get Customer Profile Page {profiles_array[i][0]}, From Account {username}")
+#     # Wait for a few seconds
+#     time.sleep(20)
+#     for i in range(len(profiles_array)):
+#         try:
+#             # Navigate to client profile page
+#             driver.get(f"https://www.instagram.com/{profiles_array[i][0]}/")
+#             # Wait for the page to load and be visible (adjust the sleep time as necessary)
+#             time.sleep(15)
+#             print(f"Success: Customer Profile Page {profiles_array[i][0]}, From Account {username}")
+#         except:
+#             print(f"Failed: Can't get Customer Profile Page {profiles_array[i][0]}, From Account {username}")
 
-        try:
-            following_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Following')]") # Working
-            # following_button = driver.find_element(By.XPATH, "//div[text()='Following']") # Working
-            # following_button = driver.find_element(By.CSS_SELECTOR, "button[type='button']") # NOT Stable  
-            print(f"Regarding user profile: {profiles_array[i][0]}, From Account {username} ") #TO_DO # Add thread number and more information
-            print("This user is already being followed.")
+#         try:
+#             following_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Following')]") # Working
+#             # following_button = driver.find_element(By.XPATH, "//div[text()='Following']") # Working
+#             # following_button = driver.find_element(By.CSS_SELECTOR, "button[type='button']") # NOT Stable  
+#             print(f"Regarding user profile: {profiles_array[i][0]}, From Account {username} ") #TO_DO # Add thread number and more information
+#             print("This user is already being followed.")
 
-        except:
-            # If the "Follow" button is not found, check for "Following"
-            try:
-                follow_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Follow')]") # Working
-                # follow_button = driver.find_element(By.XPATH, "//div[text()='Follow']") # Working
-                # follow_button = driver.find_element(By.CSS_SELECTOR, "button[type='button']") # NOT Stable  
-                follow_button.click()  # Click to follow if "Follow" button is found
-                print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-                print("Clicked 'Follow' button.")
-                # Wait for a few seconds
-                time.sleep(10)
+#         except:
+#             # If the "Follow" button is not found, check for "Following"
+#             try:
+#                 follow_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Follow')]") # Working
+#                 # follow_button = driver.find_element(By.XPATH, "//div[text()='Follow']") # Working
+#                 # follow_button = driver.find_element(By.CSS_SELECTOR, "button[type='button']") # NOT Stable  
+#                 follow_button.click()  # Click to follow if "Follow" button is found
+#                 print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+#                 print("Clicked 'Follow' button.")
+#                 # Wait for a few seconds
+#                 time.sleep(10)
         
 
-            except:
-                print("Neither 'Follow' nor 'Following' button found.")
+#             except:
+#                 print("Neither 'Follow' nor 'Following' button found.")
 
-        try:
-            # Locate the Message button using the provided XPath and click it
-            message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
-            # message_button = driver.find_element(By.XPATH, "//div[text()='Message']") # Working
-            # # message_button = driver.find_element(By.CSS_SELECTOR, "div[role='button']") # NOT Stable  
-            # # Click the "Message" button
-            message_button.click()
-            print("Clicked 'Message' button.")
-            # # Wait for a few seconds
-            time.sleep(5)
+#         try:
+#             # Locate the Message button using the provided XPath and click it
+#             message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+#             # message_button = driver.find_element(By.XPATH, "//div[text()='Message']") # Working
+#             # # message_button = driver.find_element(By.CSS_SELECTOR, "div[role='button']") # NOT Stable  
+#             # # Click the "Message" button
+#             message_button.click()
+#             print("Clicked 'Message' button.")
+#             # # Wait for a few seconds
+#             time.sleep(5)
 
-        except:
-            print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-            print(" Error in 'Message' button.") # Print more information # TO_DO
+#         except:
+#             print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+#             print(" Error in 'Message' button.") # Print more information # TO_DO
         
 
         
-        try:
-            time.sleep(20)
-            # Locate POP Up Message using the provided XPath and click it
-            pop_up_message_button = driver.find_element(By.XPATH, "//button[contains(text(), 'Not Now')]") 
-            # pop_up_message_button = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
+#         try:
+#             time.sleep(20)
+#             # Locate POP Up Message using the provided XPath and click it
+#             pop_up_message_button = driver.find_element(By.XPATH, "//button[contains(text(), 'Not Now')]") 
+#             # pop_up_message_button = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
     
-            # # Click the "pop_up_message_button" button
-            pop_up_message_button.click()
-            print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-            print("Clicked Not Now in the pop up message")
-            # # Wait for a few seconds
-            time.sleep(10)
+#             # # Click the "pop_up_message_button" button
+#             pop_up_message_button.click()
+#             print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+#             print("Clicked Not Now in the pop up message")
+#             # # Wait for a few seconds
+#             time.sleep(10)
 
-        except:
-            try:
-                time.sleep(20)
-                # Locate POP Up Message using the provided XPath and click it
-                pop_up_message_button2 = driver.find_element(By.XPATH, "//button[contains(text(), 'Turn On')]") 
-                # pop_up_message_button2 = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
+#         except:
+#             try:
+#                 time.sleep(20)
+#                 # Locate POP Up Message using the provided XPath and click it
+#                 pop_up_message_button2 = driver.find_element(By.XPATH, "//button[contains(text(), 'Turn On')]") 
+#                 # pop_up_message_button2 = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
     
-                # # Click the "pop_up_message_button" button
-                pop_up_message_button2.click()
-                print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-                print("Clicked Not Now in the pop up message2")
-                # # Wait for a few seconds
-                time.sleep(10)
+#                 # # Click the "pop_up_message_button" button
+#                 pop_up_message_button2.click()
+#                 print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+#                 print("Clicked Not Now in the pop up message2")
+#                 # # Wait for a few seconds
+#                 time.sleep(10)
 
-            except:
-                print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-                print(" Error in Clicking pop up message2.") 
+#             except:
+#                 print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+#                 print(" Error in Clicking pop up message2.") 
 
-        try:
-            time.sleep(10)        
-            # Locate the Send Message Textbox using the provided XPath and click it
-            message_txtBox = driver.find_element(By.CSS_SELECTOR, "div[role='textbox']") #Working # TO_DO # Improve 
-            # time.sleep(20)       
-            # # Click the "Message" button
-            # message_txtBox.click()
-            marketing_message1 = """Hello there! 🌹
+#         try:
+#             time.sleep(10)        
+#             # Locate the Send Message Textbox using the provided XPath and click it
+#             message_txtBox = driver.find_element(By.CSS_SELECTOR, "div[role='textbox']") #Working # TO_DO # Improve 
+#             # time.sleep(20)       
+#             # # Click the "Message" button
+#             # message_txtBox.click()
+#             marketing_message1 = """Hello there! 🌹
 
-We hope you’re having a great day! ❤
+# We hope you’re having a great day! ❤
 
-We’re the petssparkle marketing team, and we really like your profile. It looks like you could be our next spotlight model! 📸
+# We’re the petssparkle marketing team, and we really like your profile. It looks like you could be our next spotlight model! 📸
 
-If you are interested, Kindly send "Pets Sparkle Star" in a message to our official page! 🎁🎁
-📍| @petssparkle_official"""
+# If you are interested, Kindly send "Pets Sparkle Star" in a message to our official page! 🎁🎁
+# 📍| @petssparkle_official"""
 
-            marketing_message = """Hello there!
-            We hope you’re having a great day!
-            We’re the petssparkle marketing team, and we really like your profile. It looks like you could be our next spotlight model!
-            Would you like to learn more about our ambassador program?
-            | @petssparkle"""
+#             marketing_message = """Hello there!
+#             We hope you’re having a great day!
+#             We’re the petssparkle marketing team, and we really like your profile. It looks like you could be our next spotlight model!
+#             Would you like to learn more about our ambassador program?
+#             | @petssparkle"""
         
-            pyperclip.copy(marketing_message1)
-            time.sleep(5)
-            message_txtBox.click()  # Click to focus the text box
-            message_txtBox.send_keys(Keys.CONTROL, 'v')  # Paste the clipboard content 
-            time.sleep(5)
+#             pyperclip.copy(marketing_message1)
+#             time.sleep(5)
+#             message_txtBox.click()  # Click to focus the text box
+#             message_txtBox.send_keys(Keys.CONTROL, 'v')  # Paste the clipboard content 
+#             time.sleep(5)
             
-            # for letter in marketing_message:
-            #     message_txtBox.send_keys(letter)  # Send each letter
-            #     time.sleep(0.2)  # Delay between letters
+#             # for letter in marketing_message:
+#             #     message_txtBox.send_keys(letter)  # Send each letter
+#             #     time.sleep(0.2)  # Delay between letters
 
-            # Press the Enter key
-            message_txtBox.send_keys(Keys.RETURN)
-            time.sleep(5)
-            print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-            print("Sending Message Successfully") # Print more information # TO_DO
+#             # Press the Enter key
+#             message_txtBox.send_keys(Keys.RETURN)
+#             time.sleep(5)
+#             print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+#             print("Sending Message Successfully") # Print more information # TO_DO
             
 
-        except:
-            print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-            print(" Error in Sending The Message") # Print more information # TO_DO
+#         except:
+#             print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+#             print(" Error in Sending The Message") # Print more information # TO_DO
 ##########################################################################################################
     # Keep the browser open for observation
     input("Press Enter to close this browser...")
@@ -371,9 +396,10 @@ arrays = split_excel_data_to_3 (file_path, sheet_name) #TO_DO # Check n Change
 # List of URLs and usernames to automate
 browsers_data = [
 # { 'username': 'petssparkle.009', 'password': 'petssparkle&1', 'profile': arrays[0]}, # Panned
-{ 'username': 'petssparkle.06', 'password': 'petssparkle&12', 'profile': arrays[0]}, # No Message Sent
+# { 'username': 'petssparkle.06', 'password': 'petssparkle&12', 'profile': arrays[0]}, # No Message Sent
 # { 'username': 'petssparkle.09', 'password': 'petssparkle&12', 'profile': arrays[1]}, # Sent one message 
-{ 'username': 'petssparkle.u11', 'password': 'petssparkle&11', 'profile': arrays[1]} # No Message Sent
+# { 'username': 'petssparkle.u11', 'password': 'petssparkle&11', 'profile': arrays[1]}, # No Message Sent
+{ 'username': 'bbelal.ali', 'password': 'Bolbol00curt', 'profile': arrays[1]} # Personal Account
 ]
 
 # Create and start threads for each browser
