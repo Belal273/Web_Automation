@@ -108,6 +108,59 @@ def control_browser(username, password, profiles_array):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+
+    try:
+        time.sleep(10)
+        time.sleep(5)
+        comment_area = driver.find_element(By.XPATH, "//textarea") 
+
+        # Click on the most recent post
+        # comment_area.click()
+        comment_area.send_keys("letter")  # Send each letter
+
+        # Wait to see the post after clicking
+        time.sleep(5)  # Adjust time as needed for observation
+
+        print("Located Comment 2")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    try:
+        time.sleep(10)
+        # Locate the most recent Instagram post using the post grid
+        # Instagram posts are usually inside <a> tags with an <img> inside
+        # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+        comment_area = driver.find_element(By.XPATH, "//textarea[contains(@class, 'xvbhtw8 ')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+        # Click on the most recent post
+        comment_area.send_keys("letter")
+
+        # Wait to see the post after clicking
+        time.sleep(5)  # Adjust time as needed for observation
+
+        print(" Located Comment 3")
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    # try:
+    #     time.sleep(10)
+    #     # Locate the most recent Instagram post using the post grid
+    #     # Instagram posts are usually inside <a> tags with an <img> inside
+    #     # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+    #     comment_area = driver.find_element(By.XPATH, "//div[contains(@class, 'xdj266r  ')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+    #     # Click on the most recent post
+    #     comment_area.send_keys("letter")
+
+    #     # Wait to see the post after clicking
+    #     time.sleep(5)  # Adjust time as needed for observation
+
+    #     print(" Located Comment 4")
+
+    # except Exception as e:
+    #     print(f"An error occurred: {e}")
     
     # try:
     #     # Locate the Message button using the provided XPath and click it
