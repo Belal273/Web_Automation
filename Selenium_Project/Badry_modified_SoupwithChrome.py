@@ -80,8 +80,10 @@ driver.get('https://www.youtube.com/')
 
 html = driver.page_source
 soup = BeautifulSoup(html,features="html.parser")
-
-print(get_xpath(wait("button" ,"aria-label" , "Search with your voice" , 0)))
+# testElement = wait("button" ,"aria-label" , "Search with your voice" , 0)
+testElement = wait("button" ,"class" , "yt-spec-button-shape-next" , 1)
+print(testElement)
+print(get_xpath(testElement))
 # Keep the browser open for observation
 input("Press Enter to close this browser...")
     
