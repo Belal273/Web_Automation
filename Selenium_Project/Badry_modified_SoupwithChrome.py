@@ -126,7 +126,11 @@ testElement = wait("svg" ,"aria-label" , "Like" , 0)
 
 print(testElement)
 likePAth = get_xpath(testElement)
+print("original svg like path")
 print(likePAth)
+desired_Like_xpath = likePAth.rsplit("/", 3)[0]  
+print("desired like path")
+print(desired_Like_xpath)
 time.sleep(5) 
 # try:
 #     driver.find_element(By.XPATH, likePAth).click()
@@ -140,17 +144,20 @@ time.sleep(5)
 #     print("Not Enter")
 
 
-xx = driver.find_element(By.XPATH, "/html/body/div[7]/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[1]/span[1]/div/div")
+# xx = driver.find_element(By.XPATH, "/html/body/div[7]/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[1]/span[1]/div/div") # Working , Correct Like Path 
+xx = driver.find_element(By.XPATH, desired_Like_xpath)
+print("Double Click")
 time.sleep(5)
+xx.click()
 xx.click()
 time.sleep(5)
 
-print("FINALE")
-time.sleep(20)
-xx = driver.find_element(By.XPATH, "/html/body/div[7]/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[1]/span[1]/div/div")
-time.sleep(5)
-xx.click()
-time.sleep(5)
+# print("FINALE")
+# time.sleep(20)
+# xx = driver.find_element(By.XPATH, "/html/body/div[7]/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/section[1]/span[1]/div/div")
+# time.sleep(5)
+# xx.click()
+# time.sleep(5)
 
 
 
