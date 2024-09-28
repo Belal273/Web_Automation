@@ -54,14 +54,59 @@ def split_excel_data(file_path, sheet_name, num_splits):
     return split_arrays
 
 # Example usage
-arrays = split_excel_data('instagram.xlsx', "Sheet1", 3)
-print("Arrays")
-print(arrays)
-print("Arrays 0")
-print(arrays[0])
-print("Arrays 1")
-print(arrays[1])
-print("Arrays 2")
-print(arrays[2])
+# arrays = split_excel_data('instagram.xlsx', "Sheet1", 3)
+# print("Arrays")
+# print(arrays)
+# print("Arrays 0")
+# print(arrays[0])
+# print("Arrays 1")
+# print(arrays[1])
+# print("Arrays 2")
+# print(arrays[2])
 # print("Arrays 3")
 # print(arrays[3])
+import threading
+
+# Function to control the browser (placeholder for your actual implementation)
+def control_browser(username, password, profile):
+    print(f"Controlling browser for {username} with profile {profile}")
+    # Add your browser control logic here
+
+# Function to collect user input for browser data
+def collect_browser_data():
+    browsers_data = []
+    
+    number_of_profiles = int(input("Enter the number of profiles you want to add: "))
+    arrays = split_excel_data('instagram.xlsx', "Sheet1", number_of_profiles)
+    
+    for i in range(number_of_profiles):
+        username = input(f"Enter username for profile {i + 1}: ")
+        password = input(f"Enter password for profile {i + 1}: ")
+        # profile = input(f"Enter profile data for profile {i + 1}: ")  # Assuming you want to collect profile data too
+        
+        browsers_data.append({
+            'username': username,
+            'password': password,
+            'profile': arrays[i]
+        })
+
+        # done = input("Are you done adding profiles? (yes/no): ").strip().lower()
+        # if done == 'yes':
+        #     break
+
+    return browsers_data
+
+# Collect browser data from user
+browsers_data = collect_browser_data()
+print(browsers_data)
+
+# Create and start threads for each browser
+# threads = []
+# for data in browsers_data:
+#     thread = threading.Thread(target=control_browser, args=(data['username'], data['password'], data['profile']))
+#     threads.append(thread)
+#     thread.start()
+
+# # Wait for all threads to complete
+# for thread in threads:
+#     thread.join()
