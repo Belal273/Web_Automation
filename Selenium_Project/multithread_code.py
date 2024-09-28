@@ -520,7 +520,14 @@ If you are interested, Kindly send "Pets Sparkle Star" in a message to our offic
 
             # Click on the most recent post
             # comment_area.click()
-            comment_area.send_keys("letter")  # Send each letter
+            comment_message = """ Check your DMs, Please  🌹 """
+            pyperclip.copy(comment_message)
+            time.sleep(5)
+            # Click on the most recent post
+            # comment_area.send_keys("letter")
+            comment_area.send_keys(Keys.CONTROL, 'v')
+            time.sleep(1)
+            comment_area.send_keys(Keys.RETURN)
 
             # Wait to see the post after clicking
             time.sleep(5)  # Adjust time as needed for observation

@@ -2,7 +2,9 @@
 import sys
 import pandas as pd
 from PyQt5 import QtWidgets
-from frontend_Basic import Ui_MainWindow  # Import the frontend UI class
+from frontend_Adv import Ui_MainWindow  # Import the frontend UI class
+from PyQt5.QtWidgets import QMessageBox
+
 
 class MyApp(QtWidgets.QMainWindow):
     def __init__(self):
@@ -12,14 +14,78 @@ class MyApp(QtWidgets.QMainWindow):
 
         # Initialize file path
         self.file_path = None  # Initialize the file_path attribute
+        self.num_of_accounts = 0
+        self.current_username = None
+        self.current_password = None
+        self.browsers_data = []
 
         # Additional logic can go here
         self.setup_connections()
-        self.ui.Run_pushButton.clicked.connect(self.handle_Run_Buttonr)
-
+        # self.ui.Run_pushButton.clicked.connect(self.handle_Run_Button)# Way2: Connect object with function directly inside init
+        
     def setup_connections(self):
         # Example: Connecting signals to slots
-        self.ui.Browse_pushButton.clicked.connect(self.handle_browse_button_click)
+        self.ui.Browse_pushButton.clicked.connect(self.handle_browse_button_click) # Way1: Connect object with function inside setup connection
+        self.ui.Run_pushButton.clicked.connect(self.handle_Run_Button) # Way2: Connect object with function directly inside init
+        self.ui.Password_textEdit.setPlaceholderText("Enter your password") # TO_DO # Hide Password Characters
+        self.ui.UserName_textEdit.setPlaceholderText("Enter your username") 
+        self.ui.Add_pushButton.clicked.connect(self.handle_Add_Button) # If Add pushbutton is clicked go to handle_Add_Button function
+        self.ui.Remove_pushButton.clicked.connect(self.handle_Remove_Button) # If Remove pushbutton is clicked go to handle_Remove_Button function
+        self.ui.Check_pushButton.clicked.connect(self.handle_Check_Button) # If Check pushbutton is clicked go to handle_Check_Button function
+    
+
+    def handle_Add_Button(self):
+        # TO_DO # Feedback in Dialogue_textBrowser
+
+        # Get the content of the text edits
+        username = self.ui.UserName_textEdit.toPlainText().strip()
+        password = self.ui.Password_textEdit.toPlainText().strip()
+    
+        # Check if both fields are not empty
+        if username and password:
+            self.ui.UserName_textEdit.clear()
+            self.ui.Password_textEdit.clear()
+            self.ui.Password_textEdit.setPlaceholderText("Enter your password") 
+            self.ui.UserName_textEdit.setPlaceholderText("Enter your username") 
+            # You can use the username and password variables here
+            print(f"Username: {username}, Password: {password}")
+            self.num_of_accounts = self.num_of_accounts + 1
+            self.browsers_data.append({
+            'username': username,
+            'password': password,
+            'profile': []
+        }) 
+        
+            # Clear the text edits
+            # self.ui.UserName_textEdit.clear()
+            # self.ui.Password_textEdit.clear()
+            
+        else:
+            # Show a warning message box
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Both fields are required.")
+            msg.setWindowTitle("Input Error")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
+
+    def handle_Remove_Button(self):
+        if self.num_of_accounts > 0:
+            self.num_of_accounts = self.num_of_accounts - 1
+        
+        if self.browsers_data:
+            self.browsers_data.pop()
+        
+
+    def handle_Check_Button(self):
+        print(f"Num of accounts : {self.num_of_accounts}")
+        print("self.browsers_data")
+        print(self.browsers_data)
+        # TO_DO # Make it Remove all
+        # self.browsers_data = []
+        # self.num_of_accounts = 0
+        # print("self.browsers_data After Clear All")
+        # print(self.browsers_data)
 
     def handle_browse_button_click(self):
         # Logic for what happens when the button is clicked
@@ -36,7 +102,10 @@ class MyApp(QtWidgets.QMainWindow):
             print("Selected file:", file_path)
             self.ui.Path_textBrowser.setText(file_path)  # Assuming you have a QTextBrowser t
     
-    def handle_Run_Buttonr(self):
+    def handle_Run_Button(self):
+        # TO_DO
+        # Split excel and append arrays to browser data
+        
         print("Run Clicked")
         # Check if the file path is set
         if  self.file_path == None:
@@ -50,16 +119,38 @@ class MyApp(QtWidgets.QMainWindow):
         
         # Here you can set the sheet name and number of splits
         sheet_name = "Sheet1"  # Replace with your actual sheet name
-        num_splits = 3  # Specify the number of splits
+        # num_splits = 3  # self.num_of_accounts # Specify the number of splits # TO_DO # Change
+        num_splits = self.num_of_accounts 
 
-        try:
-            # Call the split function
-            arrays = split_excel_data(self.file_path, sheet_name, num_splits)
-            print("Arrays")
-            for i, array in enumerate(arrays):
-                print(f"Arrays {i}: {array}")
-        except Exception as e:
-            QtWidgets.QMessageBox.critical(self, "Error", str(e))
+        if self.num_of_accounts > 0:
+            try:
+                # Call the split function
+                arrays = split_excel_data(self.file_path, sheet_name, num_splits)
+                print("Arrays")
+                for i, array in enumerate(arrays):
+                    # print(f"Arrays {i}: {array}")
+                    # print(f"{i}")
+                    self.browsers_data[i]['profile'] = array
+                    print(f"self.browsers_data[{i}]")
+                    print(self.browsers_data[i])
+                    
+                    # print(self.browsers_data[i][0])
+                    # print(self.browsers_data[i][1])
+                    # print(self.browsers_data[i][2])
+                
+                # For Debugging
+                # print("self.browsers_data")
+                # print(self.browsers_data)
+            except Exception as e:
+                QtWidgets.QMessageBox.critical(self, "Error", str(e))
+        else:
+            # Show a warning message box
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setText("Enter at least one account first")
+            msg.setWindowTitle("Input Error")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.exec_()
 
 def split_excel_data(file_path, sheet_name, num_splits):
     """
