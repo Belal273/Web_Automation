@@ -5,6 +5,20 @@ from PyQt5 import QtWidgets
 from frontend_Adv import Ui_MainWindow  # Import the frontend UI class
 from PyQt5.QtWidgets import QMessageBox
 
+import pyperclip
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+import threading
+
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+from msedge.selenium_tools import Edge, EdgeOptions
+from bs4 import BeautifulSoup
+import os 
+
+
 
 class MyApp(QtWidgets.QMainWindow):
     def __init__(self):
@@ -141,6 +155,18 @@ class MyApp(QtWidgets.QMainWindow):
                 # For Debugging
                 # print("self.browsers_data")
                 # print(self.browsers_data)
+                
+                # Create and start threads for each browser
+                threads = []
+                for data in self.browsers_data:
+                    thread = threading.Thread(target=control_browser, args=(data['username'], data['password'], data['profile']))
+                    threads.append(thread)
+                    thread.start()
+
+                # Wait for all threads to complete
+                for thread in threads:
+                    thread.join()
+
             except Exception as e:
                 QtWidgets.QMessageBox.critical(self, "Error", str(e))
         else:
@@ -151,6 +177,55 @@ class MyApp(QtWidgets.QMainWindow):
             msg.setWindowTitle("Input Error")
             msg.setStandardButtons(QMessageBox.Ok)
             msg.exec_()
+
+global driver
+# Function to control a browser instance
+def control_browser(username, password, profiles_array):
+    # driver = myDRIVER
+    driver = webdriver.Chrome()
+    
+    # Open Instagram's main page
+    driver.get("https://www.instagram.com")
+
+    # Optional: maximize the window
+    # driver.maximize_window()
+
+    # Wait for a few seconds to see the page
+    time.sleep(15)
+    
+    # Example action: Entering a username (like on the Instagram login page)
+    username_field = driver.find_element(By.NAME, "username")
+
+    for letter in username:
+        username_field.send_keys(letter)  # Send each letter
+        time.sleep(0.1)  # Delay between letters
+
+    # Wait for a few seconds before password
+    time.sleep(3)
+
+    password_field = driver.find_element(By.NAME, "password")
+    for letter in password:
+        password_field.send_keys(letter)  # Send each letter
+        time.sleep(0.1)  # Delay between letters
+
+    # Wait for a few seconds before password
+    time.sleep(3)
+
+    try:
+        # Locate the Log In button using the provided XPath and click it
+        login_button = driver.find_element(By.XPATH, '//*[@id="loginForm"]/div/div[3]/button/div')
+        login_button.click()  # Click the Log In button
+
+        # Wait for a few seconds 
+        time.sleep(10)
+    except:
+        print("Can't Log In")
+##########################################################################################################
+    # Keep the browser open for observation
+    input("Press Enter to close this browser...") # TO_DO Try to close thread or take useful input from user
+    
+    driver.quit()
+
 
 def split_excel_data(file_path, sheet_name, num_splits):
     """
