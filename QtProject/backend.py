@@ -17,6 +17,64 @@ from selenium.webdriver.support.wait import WebDriverWait
 from msedge.selenium_tools import Edge, EdgeOptions
 from bs4 import BeautifulSoup
 import os 
+#######################################################################################################
+# This Part is for Subscription Feature 
+# Other Parts in code related to subscription will have # Subscription Part # TO_DO
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import json
+
+# Define the scope
+scope = ["https://spreadsheets.google.com/feeds",
+         "https://www.googleapis.com/auth/drive"]
+
+# JSON credentials as a string (replace with your actual JSON content)
+json_credentials = """{
+  "type": "service_account",
+  "project_id": "instgram-bot-credentials",
+  "private_key_id": "e2433097e3d8730a83f37b753b87ec1fdc4837ab",
+  "private_key": "-----BEGIN PRIVATE KEY-----\\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCRgc/nqtpnK8fZ\\n7Br4IkymLGfGB4oTxK4OETWADF8dwjQg5DctMjUygXO6hh2RNskTto5Pki2Qgecs\\nISxdQXciUxyEXsBgYkDcXiSZqckwMcKqcIYTCoCNJ504HA8mFpSXNcGGH390LbUv\\nAGQgElOhcgbSqeTMeg7UPif9Iqui1HTF3it0rH9uDlAh3/5yMxqDRzGRcS+Oqo9x\\nOq0quw7hukg6YHrc94OPZmuaCskf2ptYlulVUnoEGvJRaIpQcG9iwcIQyi4toFhX\\nrSLLaBeR4WUU3BDM1ZcGKSNsRz3yKrR5SaGW4K0yqcg4Ut7OJGAoc2GzXj9ZihYD\\nhjZ3E/o5AgMBAAECggEAF3Kkzz9gHJoYhYyft/bHBUxImMfkP1VFeyzYwz67IS+H\\nePltztG1cuMbhCZSo3EBrDSR8E6tGwlj+F+MJ6cCDLz57nbaZ23N5/UfzsdmjWan\\naRHi+TSLDLQiiMU0x72BynA2NGflARLQjLdyaxyo725RnScVoMHWm+s8RHWO1RlL\\nT2PBcx2Dd6x0KxpBpdsCu60nbaFkz/KYOwqNk9ib4M/dXG0JH8oWtDXrWUn0lSm9\\nxwb5s0WBI5nIme5HYSGAxOjcxp78IEM7UZnYxF4B2XSpWrqKXjk9gyL/NTwtLOL8\\npvEfqwd7hxmsYUsf3vz/IO3vmPIelxFtX11nBXnrJQKBgQDHZuo33zZRJJ3fucbr\\nrEGdM/YiCBwfxoVCVt2fZLJedvbFrF665XMt4bYb/UYAGzwAfHTRT7SNHQhN0RTN\\ntYwEhfv1eKQSKPeL79ual190U3iXoswh3Dl+YeV41vxhPFHCWhhzsGjKQdJjw+Wk\\nzMp5A/dp4L91c4eYWVE8EpeMowKBgQC6zr8vRCMMGo+LAkE+ymM1vH82G5PIzGbw\\nauT6OfIaoIjYPIzmLG2PrYc13UOpQrcEI/A9Dgwo2I4LT4Koec6tLGLbzi+X7YBa\\nEaQMc8Q6Df1NWevvNlV3iFoB4/dxIZEPjRP6ucQPST2BIbUFmGs7VI0FNMaBV919\\nYQgNQRjPcwKBgC5XdbGcd6QuDV7Uby2QcANX8yj/l4GvAoNjashDf8zCeyF/qNho\\nwPb10Pv6Rc16htxaEFAg5QYyrB5hrCMOwUa/2Mm4yvDJgpaMHQ51haKkT492L1jj\\nNJ1xpQILfMYgXaP8ilhAtGnlGD9FZNaDHb84M8Twja5/NhErGN0MORpfAoGAMLPC\\nCFKdSISMM9OMqxAcuV/BUpvx9YHEvJ1BwTLmOabsxmNS4JdooPK+s35SK4inKj8s\\nXN6SsPt0XOKHz+Chz2gpBeFFaziSI+lBebWczP3ksgvlhOIHejhkLuX+FtKHfSRs\\ntwtDYDDaBhaBmUnZewhaE6dksUf1CMEJVltIWp0CgYEAijXUq1p1hbGlV1kX8USY\\nQ0whZLP8ru5OBLaHk1HlwcwJ9U1de2dHDPR2D9swRXhRTzG0/xngOHFLnz6phEfL\\nKQlQN/+mXtS9KSctQJtPYRFH+w60a44FnW2B8Q9TukF6Qcwtp0a14X5LzeL+x5gS\\nG9wcWTxc/VOkx0gxVomOAjI=\\n-----END PRIVATE KEY-----\\n",
+  "client_email": "insta-bot-account@instgram-bot-credentials.iam.gserviceaccount.com",
+  "client_id": "102217871465761600519",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/insta-bot-account%40instgram-bot-credentials.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}"""
+
+# Load the credentials from the string
+credentials_dict = json.loads(json_credentials)
+# Create a credentials object
+creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_dict, scope)
+# Authorize the client
+client = gspread.authorize(creds)
+
+# # Load the credentials from the JSON key file
+# creds = ServiceAccountCredentials.from_json_keyfile_name("instgram-bot-credentials-e2433097e3d8.json", scope)
+
+# Now you can access your Google Sheet
+spreadsheet = client.open('Instgram_Bot')  # Replace with your actual sheet title
+worksheet = spreadsheet.sheet1  # You can also use get_worksheet(index)
+
+# Create a threading event for termination
+terminate_event = threading.Event()
+
+# Function to check the value of cell B2 every 5 minutes
+def check_b2_value():
+    while True:
+        value = worksheet.acell('B2').value
+        # print(f"Current value in B2: {value}")
+        print("Checking Subscription Status")
+        if value == '0':  # Check if B2 is zero
+            # print("Value in B2 is zero. Terminating all threads.")
+            print("Kindly update your subscription !")
+            terminate_event.set()  # Signal all threads to terminate
+            break
+        else:
+            print("Your subscription is up to date")
+        time.sleep(300)  # Wait for 5 minutes
+#######################################################################################################
 
 
 
@@ -182,6 +240,11 @@ class MyApp(QtWidgets.QMainWindow):
                 message_value_ui = self.ui.Message_textEdit.toPlainText()
                 IsMessageChecked_ui = self.ui.Message_checkBox.isChecked()
 
+                # Start the checking thread
+                # Subscription Part # TO_DO
+                check_thread = threading.Thread(target=check_b2_value)
+                check_thread.start()
+
                 # Create and start threads for each browser
                 threads = []
                 for data in self.browsers_data:
@@ -192,6 +255,10 @@ class MyApp(QtWidgets.QMainWindow):
                 # Wait for all threads to complete
                 for thread in threads:
                     thread.join()
+
+                # Wait for the checking thread to finish
+                # Subscription Part # TO_DO
+                check_thread.join()
 
             except Exception as e:
                 QtWidgets.QMessageBox.critical(self, "Error", str(e))
@@ -250,367 +317,159 @@ def wait( type, x, y, element_no,driver): # TO_DO Check especially driver , can 
 def control_browser(username, password, profiles_array, comment_value, message_value, IsMessageChecked):
     # driver = myDRIVER
     driver = webdriver.Chrome()
+
+    # Subscription Part # TO_DO
+    # while not terminate_event.is_set():
+    while not terminate_event.is_set():  # Check if termination is requested # TO_DO # Not_Working >> Update
+
+        # Subscription Part # TO_DO
+        # Put periodaically inside code , each couple of lines
+        if terminate_event.is_set():
+            return  # Exit if termination is requested
     
-    # Open Instagram's main page
-    driver.get("https://www.instagram.com")
-
-    # Optional: maximize the window
-    # driver.maximize_window()
-
-    # Wait for a few seconds to see the page
-    time.sleep(15)
+        # # driver = myDRIVER
+        # driver = webdriver.Chrome()
     
-    # Example action: Entering a username (like on the Instagram login page)
-    username_field = driver.find_element(By.NAME, "username")
+        # Open Instagram's main page
+        driver.get("https://www.instagram.com")
 
-    for letter in username:
-        username_field.send_keys(letter)  # Send each letter
-        time.sleep(0.1)  # Delay between letters
+        # Optional: maximize the window
+        # driver.maximize_window()
 
-    # Wait for a few seconds before password
-    time.sleep(3)
+        # Wait for a few seconds to see the page
+        time.sleep(15)
+    
+        # Example action: Entering a username (like on the Instagram login page)
+        username_field = driver.find_element(By.NAME, "username")
 
-    password_field = driver.find_element(By.NAME, "password")
-    for letter in password:
-        password_field.send_keys(letter)  # Send each letter
-        time.sleep(0.1)  # Delay between letters
+        for letter in username:
+            username_field.send_keys(letter)  # Send each letter
+            time.sleep(0.1)  # Delay between letters
 
-    # Wait for a few seconds before password
-    time.sleep(3)
+        # Wait for a few seconds before password
+        time.sleep(3)
 
-    try:
-        # Locate the Log In button using the provided XPath and click it
-        login_button = driver.find_element(By.XPATH, '//*[@id="loginForm"]/div/div[3]/button/div')
-        login_button.click()  # Click the Log In button
+        
 
-        # Wait for a few seconds 
+        password_field = driver.find_element(By.NAME, "password")
+        for letter in password:
+            password_field.send_keys(letter)  # Send each letter
+            time.sleep(0.1)  # Delay between letters
+
+        # Wait for a few seconds before password
+        time.sleep(3)
+
+        try:
+            # Locate the Log In button using the provided XPath and click it
+            login_button = driver.find_element(By.XPATH, '//*[@id="loginForm"]/div/div[3]/button/div')
+            login_button.click()  # Click the Log In button
+
+            # Wait for a few seconds 
+            time.sleep(10)
+        except:
+            print("Can't Log In")
+            return
+#######################################################################################################
+
+#######################################################################################################
+        # Wait for a few seconds
         time.sleep(10)
-    except:
-        print("Can't Log In")
-#######################################################################################################
-#     # ## Debugging for one profile only 
-
-#     # Navigate to client profile page
-#     driver.get(f"https://www.instagram.com/{profiles_array[4][0]}/")
-    
-#     # Wait for the page to load and be visible (adjust the sleep time as necessary)
-#     time.sleep(15)
-
-#     try:
-#         following_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Following')]") # Working
-#         # following_button = driver.find_element(By.XPATH, "//div[text()='Following']") # Working
-#         # following_button = driver.find_element(By.CSS_SELECTOR, "button[type='button']") # NOT Stable  
-#         print(f"Regarding user profile: {profiles_array[4][0]}") #TO_DO # Add thread number and more information
-#         print("This user is already being followed.")
-
-#     except:
-#             # If the "Follow" button is not found, check for "Following"
-#         try:
-#             follow_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Follow')]") # Working
-#             # follow_button = driver.find_element(By.XPATH, "//div[text()='Follow']") # Working
-#             # follow_button = driver.find_element(By.CSS_SELECTOR, "button[type='button']") # NOT Stable  
-#             follow_button.click()  # Click to follow if "Follow" button is found
-#             print(f"Regarding user profile: {profiles_array[4][0]}") #TO_DO # Add thread number and more information
-#             print("Clicked 'Follow' button.")
-#             # Wait for a few seconds
-#             time.sleep(20)
-        
-
-#         except:
-#             print("Neither 'Follow' nor 'Following' button found.")
-# #######################################################################################################
-#     try:
-#         # Locate the Message button using the provided XPath and click it
-#         message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
-#         # message_button = driver.find_element(By.XPATH, "//div[text()='Message']") # Working
-#         # # message_button = driver.find_element(By.CSS_SELECTOR, "div[role='button']") # NOT Stable  
-#         # # Click the "Message" button
-#         message_button.click()
-#         print("Clicked 'Message' button.")
-#         # # Wait for a few seconds
-#         time.sleep(10)
-
-#     except:
-#         print(" Error in 'Message' button.") # Print more information # TO_DO
-
-#     try:
-#         time.sleep(20)
-#         # Locate POP Up Message using the provided XPath and click it
-#         pop_up_message_button = driver.find_element(By.XPATH, "//button[contains(text(), 'Not Now')]") 
-#         # pop_up_message_button = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
-    
-#         # # Click the "pop_up_message_button" button
-#         pop_up_message_button.click()
-#         print("Clicked Not Now in the pop up message")
-#         # # Wait for a few seconds
-#         time.sleep(10)
-
-#     except:
-#         try:
-#             time.sleep(20)
-#             # Locate POP Up Message using the provided XPath and click it
-#             pop_up_message_button2 = driver.find_element(By.XPATH, "//button[contains(text(), 'Turn On')]") 
-#             # pop_up_message_button2 = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
-    
-#             # # Click the "pop_up_message_button" button
-#             pop_up_message_button2.click()
-#             print("Clicked Not Now in the pop up message2")
-#             # # Wait for a few seconds
-#             time.sleep(10)
-
-#         except:
-#             print(" Error in Clicking pop up message2.") 
-
-#     try:
-#         time.sleep(20)
-#         # Locate the Send Message Textbox using the provided XPath and click it
-#         message_txtBox = driver.find_element(By.CSS_SELECTOR, "div[role='textbox']") #Working # TO_DO # Improve 
-#         # time.sleep(20)
-       
-#         # Click the "Message" button
-#         # message_txtBox.click()
-        
-#         marketing_message1 = """Hello there! 🌹
-
-# We hope you’re having a great day! ❤
-
-# We’re the petssparkle marketing team, and we really like your profile. It looks like you could be our next spotlight model! 📸
-
-# Would you like to learn more about our ambassador program? 🎁🎁
-# 📍| @petssparkle"""
-
-#     #     marketing_message = (
-#     #     "Hello there! "  
-#     #     "We hope you’re having a great day! "  
-#     #     "Would you like to learn more about our ambassador program? "
-#     #     "| @petssparkle"  
-#     # )
-    
-#     #     marketing_message2 = """Hello there!
-#     #     We hope you’re having a great day!
-#     #     We’re the petssparkle marketing team, and we really like your profile. It looks like you could be our next spotlight model!
-#     #     Would you like to learn more about our ambassador program? 
-#     #     | @petssparkle"""
-
-#         pyperclip.copy(marketing_message1)
-#         time.sleep(10)
-#         message_txtBox.click()  # Click to focus the text box
-#         message_txtBox.send_keys(Keys.CONTROL, 'v')  # Paste the clipboard content
-#         # Work around # TO_DO # Improve
-
-#         # for letter in marketing_message2:
-#         #     message_txtBox.send_keys(letter)  # Send each letter
-#         #     time.sleep(0.2)  # Delay between letters
-
-#         # Press the Enter key
-#         message_txtBox.send_keys(Keys.RETURN)
-#         time.sleep(5) 
-#         print("Sending Message Successfully")
-
-#     except:
-#         print(" Error in Sending The Message") # Print more information # TO_DO
-# #######################################################################################################  
-#     driver.get(f"https://www.instagram.com/{profiles_array[4][0]}/")  #TO_DO #Like and commnt first? 
-#     time.sleep(15)
-
-#     try:
-#         time.sleep(10)
-#         # Locate the most recent Instagram post using the post grid
-#         # Instagram posts are usually inside <a> tags with an <img> inside
-#         # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
-#         most_recent_post = driver.find_element(By.XPATH, "//div[contains(@class, 'aagw')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
-
-#         # Click on the most recent post
-#         most_recent_post.click()
-
-#         # Wait to see the post after clicking
-#         time.sleep(5)  # Adjust time as needed for observation
-
-#         print("Located post")
-
-#     except Exception as e:
-#         print(f"An error occurred: {e}")
-
-#     try:
-#         time.sleep(10) 
-#         current_url = driver.current_url
-#         print("Current URL:", current_url)
-#         time.sleep(5)
-#         html = driver.page_source
-#         soup = BeautifulSoup(html,features="html.parser")
-
-#         LikeElement = wait("svg" ,"aria-label" , "Like" , 0,driver)
-
-#         print(LikeElement)
-#         likePAth = get_xpath(LikeElement)
-#         print("original svg like path")
-#         print(likePAth)
-#         desired_Like_xpath = likePAth.rsplit("/", 3)[0]  
-#         print("desired like path")
-#         print(desired_Like_xpath)
-#         time.sleep(5) 
-#         likeButton = driver.find_element(By.XPATH, desired_Like_xpath)
-#         print("Double Click")
-#         time.sleep(5)
-#         likeButton.click()
-#         likeButton.click()
-#         time.sleep(5)
-#     except:
-#         print("Error in Like Area")
-
-    
-#     try:
-#         time.sleep(10)
-#         time.sleep(5)
-#         comment_area = driver.find_element(By.XPATH, "//textarea") 
-
-#         # Click on the most recent post
-#         # comment_area.click()
-#         comment_area.send_keys("letter")  # Send each letter
-
-#         # Wait to see the post after clicking
-#         time.sleep(5)  # Adjust time as needed for observation
-
-#         print("Located Comment 2")
-
-#     except Exception as e:
-#         print("An error occurred in Comment way 2 ")
-#         try:
-#             time.sleep(15)
-#             # Locate the most recent Instagram post using the post grid
-#             # Instagram posts are usually inside <a> tags with an <img> inside
-#             # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
-#             comment_area = driver.find_element(By.XPATH, "//textarea[contains(@class, 'xvbhtw8 ')]") # Working # MORE STABLE
-#             comment_message = """ Check your DMs, Please  🌹 """
-#             pyperclip.copy(comment_message)
-#             time.sleep(5)
-#             # Click on the most recent post
-#             # comment_area.send_keys("letter")
-#             comment_area.send_keys(Keys.CONTROL, 'v')
-#             time.sleep(1)
-#             comment_area.send_keys(Keys.RETURN)
-#             # Wait to see the post after clicking
-#             time.sleep(5)  # Adjust time as needed for observation
-
-#             print(" Located Comment By Way 3")
-
-#         except Exception as e:
-#             # print(f"An error occurred: {e}")
-#             print("An error occurred in Comment way 3 ")
-#             try:
-#                 CommentElement = wait("textarea" ,"aria-label" , "Add a comment..." , 0,driver)
-
-#                 # print(CommentElement)
-#                 CommentPath = get_xpath(CommentElement)
-#                 comment_area = driver.find_element(By.XPATH, CommentPath)
-#                 comment_message = """ Check your DMs, Please  🌹 """
-#                 pyperclip.copy(comment_message)
-#                 time.sleep(5)
-#                 # Click on the most recent post
-#                 # comment_area.send_keys("letter")
-#                 comment_area.send_keys(Keys.CONTROL, 'v')
-#                 time.sleep(1)
-#                 comment_area.send_keys(Keys.RETURN)
-
-#                 # Wait to see the post after clicking
-#                 time.sleep(5)  # Adjust time as needed for observation
-#                 print(" Located Comment By Soup Way1")
-#             except:    
-#                 print("An error occurred in Comment way 1 ")
-#######################################################################################################
-    # Wait for a few seconds
-    time.sleep(10)
-    for i in range(len(profiles_array)):
-        try:
-            # Navigate to client profile page
-            driver.get(f"https://www.instagram.com/{profiles_array[i][0]}/")
-            # Wait for the page to load and be visible (adjust the sleep time as necessary)
-            time.sleep(15)
-            print(f"Success: Customer Profile Page {profiles_array[i][0]}, From Account {username}")
-        except:
-            print(f"Failed: Can't get Customer Profile Page {profiles_array[i][0]}, From Account {username}")
-
-        try:
-            following_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Following')]") # Working
-            # following_button = driver.find_element(By.XPATH, "//div[text()='Following']") # Working
-            # following_button = driver.find_element(By.CSS_SELECTOR, "button[type='button']") # NOT Stable  
-            print(f"Regarding user profile: {profiles_array[i][0]}, From Account {username} ") #TO_DO # Add thread number and more information
-            print("This user is already being followed.")
-
-        except:
-            # If the "Follow" button is not found, check for "Following"
+        for i in range(len(profiles_array)):
+            # Subscription Part # TO_DO
+            # Put periodaically inside code , each couple of lines
+            if terminate_event.is_set():
+                return  # Exit if termination is requested
+            
             try:
-                follow_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Follow')]") # Working
-                # follow_button = driver.find_element(By.XPATH, "//div[text()='Follow']") # Working
-                # follow_button = driver.find_element(By.CSS_SELECTOR, "button[type='button']") # NOT Stable  
-                follow_button.click()  # Click to follow if "Follow" button is found
-                print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-                print("Clicked 'Follow' button.")
-                # Wait for a few seconds
-                time.sleep(10)
-        
+                # Navigate to client profile page
+                driver.get(f"https://www.instagram.com/{profiles_array[i][0]}/")
+                # Wait for the page to load and be visible (adjust the sleep time as necessary)
+                time.sleep(15)
+                print(f"Success: Customer Profile Page {profiles_array[i][0]}, From Account {username}")
+            except:
+                print(f"Failed: Can't get Customer Profile Page {profiles_array[i][0]}, From Account {username}")
+
+            try:
+                following_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Following')]") # Working
+                # following_button = driver.find_element(By.XPATH, "//div[text()='Following']") # Working
+                # following_button = driver.find_element(By.CSS_SELECTOR, "button[type='button']") # NOT Stable  
+                print(f"Regarding user profile: {profiles_array[i][0]}, From Account {username} ") #TO_DO # Add thread number and more information
+                print("This user is already being followed.")
 
             except:
-                print("Neither 'Follow' nor 'Following' button found.")
+                # If the "Follow" button is not found, check for "Following"
+                try:
+                    follow_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Follow')]") # Working
+                    # follow_button = driver.find_element(By.XPATH, "//div[text()='Follow']") # Working
+                    # follow_button = driver.find_element(By.CSS_SELECTOR, "button[type='button']") # NOT Stable  
+                    follow_button.click()  # Click to follow if "Follow" button is found
+                    print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+                    print("Clicked 'Follow' button.")
+                    # Wait for a few seconds
+                    time.sleep(10)
+        
 
-        # If User Want to send a Message
-        if IsMessageChecked == True:
-            try:
-                # Locate the Message button using the provided XPath and click it
-                message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
-                # message_button = driver.find_element(By.XPATH, "//div[text()='Message']") # Working
-                # # message_button = driver.find_element(By.CSS_SELECTOR, "div[role='button']") # NOT Stable  
-                # # Click the "Message" button
-                message_button.click()
-                print("Clicked 'Message' button.")
-                # # Wait for a few seconds
-                time.sleep(5)
+                except:
+                    print("Neither 'Follow' nor 'Following' button found.")
 
-            except:
-                print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-                print(" Error in 'Message' button.") # Print more information # TO_DO
+            # If User Want to send a Message
+            if IsMessageChecked == True:
+                try:
+                    # Locate the Message button using the provided XPath and click it
+                    message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+                    # message_button = driver.find_element(By.XPATH, "//div[text()='Message']") # Working
+                    # # message_button = driver.find_element(By.CSS_SELECTOR, "div[role='button']") # NOT Stable  
+                    # # Click the "Message" button
+                    message_button.click()
+                    print("Clicked 'Message' button.")
+                    # # Wait for a few seconds
+                    time.sleep(5)
+
+                except:
+                    print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+                    print(" Error in 'Message' button.") # Print more information # TO_DO
         
 
         
-            try:
-                time.sleep(20)
-                # Locate POP Up Message using the provided XPath and click it
-                pop_up_message_button = driver.find_element(By.XPATH, "//button[contains(text(), 'Not Now')]") 
-                # pop_up_message_button = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
-    
-                # # Click the "pop_up_message_button" button
-                pop_up_message_button.click()
-                print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-                print("Clicked Not Now in the pop up message")
-                # # Wait for a few seconds
-                time.sleep(10)
-
-            except:
                 try:
                     time.sleep(20)
                     # Locate POP Up Message using the provided XPath and click it
-                    pop_up_message_button2 = driver.find_element(By.XPATH, "//button[contains(text(), 'Turn On')]") 
-                    # pop_up_message_button2 = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
+                    pop_up_message_button = driver.find_element(By.XPATH, "//button[contains(text(), 'Not Now')]") 
+                    # pop_up_message_button = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
     
                     # # Click the "pop_up_message_button" button
-                    pop_up_message_button2.click()
+                    pop_up_message_button.click()
                     print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-                    print("Clicked Not Now in the pop up message2")
+                    print("Clicked Not Now in the pop up message")
                     # # Wait for a few seconds
                     time.sleep(10)
 
                 except:
-                    print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-                    print(" Error in Clicking pop up message2.") 
+                    try:
+                        time.sleep(20)
+                        # Locate POP Up Message using the provided XPath and click it
+                        pop_up_message_button2 = driver.find_element(By.XPATH, "//button[contains(text(), 'Turn On')]") 
+                        # pop_up_message_button2 = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
+    
+                        # # Click the "pop_up_message_button" button
+                        pop_up_message_button2.click()
+                        print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+                        print("Clicked Not Now in the pop up message2")
+                        # # Wait for a few seconds
+                        time.sleep(10)
 
-            try:
-                time.sleep(10)        
-                # Locate the Send Message Textbox using the provided XPath and click it
-                message_txtBox = driver.find_element(By.CSS_SELECTOR, "div[role='textbox']") #Working # TO_DO # Improve 
-                # time.sleep(20)       
-                # # Click the "Message" button
-                # message_txtBox.click()
-                marketing_message1 = message_value
+                    except:
+                        print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+                        print(" Error in Clicking pop up message2.") 
+
+                try:
+                    time.sleep(10)        
+                    # Locate the Send Message Textbox using the provided XPath and click it
+                    message_txtBox = driver.find_element(By.CSS_SELECTOR, "div[role='textbox']") #Working # TO_DO # Improve 
+                    # time.sleep(20)       
+                    # # Click the "Message" button
+                    # message_txtBox.click()
+                    marketing_message1 = message_value
     #             marketing_message1 = """Hello there! 🌹
     
     # We hope you’re having a great day! ❤
@@ -626,114 +485,92 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                 # Would you like to learn more about our ambassador program?
                 # | @petssparkle"""
         
-                pyperclip.copy(marketing_message1)
-                time.sleep(5)
-                message_txtBox.click()  # Click to focus the text box
-                message_txtBox.send_keys(Keys.CONTROL, 'v')  # Paste the clipboard content 
-                time.sleep(5)
+                    pyperclip.copy(marketing_message1)
+                    time.sleep(5)
+                    message_txtBox.click()  # Click to focus the text box
+                    message_txtBox.send_keys(Keys.CONTROL, 'v')  # Paste the clipboard content 
+                    time.sleep(5)
             
                 # for letter in marketing_message:
                 #     message_txtBox.send_keys(letter)  # Send each letter
                 #     time.sleep(0.2)  # Delay between letters
 
-                # Press the Enter key
-                message_txtBox.send_keys(Keys.RETURN)
-                time.sleep(5)
-                print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-                print("Sending Message Successfully") # Print more information # TO_DO
+                    # Press the Enter key
+                    message_txtBox.send_keys(Keys.RETURN)
+                    time.sleep(5)
+                    print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+                    print("Sending Message Successfully") # Print more information # TO_DO
             
 
-            except:
-                print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
-                print(" Error in Sending The Message") # Print more information # TO_DO
+                except:
+                    print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
+                    print(" Error in Sending The Message") # Print more information # TO_DO
  
-            try:
-                # Navigate to client profile page
-                driver.get(f"https://www.instagram.com/{profiles_array[i][0]}/")
-                # Wait for the page to load and be visible (adjust the sleep time as necessary)
+                try:
+                    # Navigate to client profile page
+                    driver.get(f"https://www.instagram.com/{profiles_array[i][0]}/")
+                    # Wait for the page to load and be visible (adjust the sleep time as necessary)
+                    time.sleep(15)
+                    print(f"Success: Customer Profile Page {profiles_array[i][0]}, From Account {username}")
+                except:
+                    print(f"Failed: Can't get Customer Profile Page {profiles_array[i][0]}, From Account {username}")
                 time.sleep(15)
-                print(f"Success: Customer Profile Page {profiles_array[i][0]}, From Account {username}")
-            except:
-                print(f"Failed: Can't get Customer Profile Page {profiles_array[i][0]}, From Account {username}")
-            time.sleep(15)
 ########################################################################################################## 
-        try:
-            time.sleep(10)
-            # Locate the most recent Instagram post using the post grid
-            # Instagram posts are usually inside <a> tags with an <img> inside
-            # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
-            most_recent_post = driver.find_element(By.XPATH, "//div[contains(@class, 'aagw')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
-
-            # Click on the most recent post
-            most_recent_post.click()
-
-            # Wait to see the post after clicking
-            time.sleep(5)  # Adjust time as needed for observation
-
-            print("Located post")
-
-        except Exception as e:
-            print(f"An error occurred: {e}")
-
-        try:
-            time.sleep(10) 
-            current_url = driver.current_url
-            print("Current URL:", current_url)
-            time.sleep(5)
-            html = driver.page_source
-            soup = BeautifulSoup(html,features="html.parser")
-
-            LikeElement = wait("svg" ,"aria-label" , "Like" , 0,driver)
-
-            print(LikeElement)
-            likePAth = get_xpath(LikeElement)
-            print("original svg like path")
-            print(likePAth)
-            desired_Like_xpath = likePAth.rsplit("/", 3)[0]  
-            print("desired like path")
-            print(desired_Like_xpath)
-            time.sleep(5) 
-            likeButton = driver.find_element(By.XPATH, desired_Like_xpath)
-            print("Double Click")
-            time.sleep(5)
-            likeButton.click()
-            likeButton.click()
-            time.sleep(5)
-        except:
-            print("Error in Like Area")
-
-    
-        try:
-            time.sleep(10)
-            time.sleep(5)
-            comment_area = driver.find_element(By.XPATH, "//textarea") 
-
-            # Click on the most recent post
-            # comment_area.click()
-            comment_message = comment_value
-            # comment_message = """ Check your DMs, Please  🌹 """
-            pyperclip.copy(comment_message)
-            time.sleep(5)
-            # Click on the most recent post
-            # comment_area.send_keys("letter")
-            comment_area.send_keys(Keys.CONTROL, 'v')
-            time.sleep(1)
-            comment_area.send_keys(Keys.RETURN)
-
-            # Wait to see the post after clicking
-            time.sleep(5)  # Adjust time as needed for observation
-
-            print("Located Comment 2")
-
-        except Exception as e:
-            print("An error occurred in Comment way 2 ")
             try:
-                time.sleep(15)
+                time.sleep(10)
                 # Locate the most recent Instagram post using the post grid
                 # Instagram posts are usually inside <a> tags with an <img> inside
                 # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
-                comment_area = driver.find_element(By.XPATH, "//textarea[contains(@class, 'xvbhtw8 ')]") # Working # MORE STABLE
-                comment_message = """ Check your DMs, Please  🌹 """
+                most_recent_post = driver.find_element(By.XPATH, "//div[contains(@class, 'aagw')]") # Working # message_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Message')]") # Working
+
+                # Click on the most recent post
+                most_recent_post.click()
+
+                # Wait to see the post after clicking
+                time.sleep(5)  # Adjust time as needed for observation
+
+                print("Located post")
+
+            except Exception as e:
+                print(f"An error occurred: {e}")
+
+            try:
+                time.sleep(10) 
+                current_url = driver.current_url
+                # print("Current URL:", current_url)
+                time.sleep(5)
+                html = driver.page_source
+                soup = BeautifulSoup(html,features="html.parser")
+
+                LikeElement = wait("svg" ,"aria-label" , "Like" , 0,driver)
+
+                # print(LikeElement)
+                likePAth = get_xpath(LikeElement)
+                # print("original svg like path")
+                # print(likePAth)
+                desired_Like_xpath = likePAth.rsplit("/", 3)[0]  
+                # print("desired like path")
+                # print(desired_Like_xpath)
+                time.sleep(5) 
+                likeButton = driver.find_element(By.XPATH, desired_Like_xpath)
+                # print("Double Click")
+                time.sleep(5)
+                likeButton.click()
+                likeButton.click()
+                time.sleep(5)
+            except:
+                print("Error in Like Area")
+
+    
+            try:
+                time.sleep(10)
+                time.sleep(5)
+                comment_area = driver.find_element(By.XPATH, "//textarea") 
+
+                # Click on the most recent post
+                # comment_area.click()
+                comment_message = comment_value
+                # comment_message = """ Check your DMs, Please  🌹 """
                 pyperclip.copy(comment_message)
                 time.sleep(5)
                 # Click on the most recent post
@@ -741,21 +578,22 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                 comment_area.send_keys(Keys.CONTROL, 'v')
                 time.sleep(1)
                 comment_area.send_keys(Keys.RETURN)
+
                 # Wait to see the post after clicking
                 time.sleep(5)  # Adjust time as needed for observation
 
-                print(" Located Comment By Way 3")
+                print("Located Comment ")
 
             except Exception as e:
-                # print(f"An error occurred: {e}")
-                print("An error occurred in Comment way 3 ")
+                # print("An error occurred in Comment way 2 ")
                 try:
-                    CommentElement = wait("textarea" ,"aria-label" , "Add a comment..." , 0,driver)
-
-                    # print(CommentElement)
-                    CommentPath = get_xpath(CommentElement)
-                    comment_area = driver.find_element(By.XPATH, CommentPath)
-                    comment_message = """ Check your DMs, Please  🌹 """
+                    time.sleep(15)
+                    # Locate the most recent Instagram post using the post grid
+                    # Instagram posts are usually inside <a> tags with an <img> inside
+                    # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+                    comment_area = driver.find_element(By.XPATH, "//textarea[contains(@class, 'xvbhtw8 ')]") # Working # MORE STABLE
+                    comment_message = comment_value
+                    # comment_message = """ Check your DMs, Please  🌹 """
                     pyperclip.copy(comment_message)
                     time.sleep(5)
                     # Click on the most recent post
@@ -763,21 +601,44 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                     comment_area.send_keys(Keys.CONTROL, 'v')
                     time.sleep(1)
                     comment_area.send_keys(Keys.RETURN)
-
                     # Wait to see the post after clicking
                     time.sleep(5)  # Adjust time as needed for observation
-                    print(" Located Comment By Soup Way1")
-                except:    
-                    print("An error occurred in Comment way 1 ")
+
+                    print(" Located Comment By Way ")
+
+                except Exception as e:
+                    # print(f"An error occurred: {e}")
+                    # print("An error occurred in Comment way 3 ")
+                    try:
+                        CommentElement = wait("textarea" ,"aria-label" , "Add a comment..." , 0,driver)
+
+                        # print(CommentElement)
+                        CommentPath = get_xpath(CommentElement)
+                        comment_area = driver.find_element(By.XPATH, CommentPath)
+                        # comment_message = """ Check your DMs, Please  🌹 """
+                        comment_message = comment_value
+                        pyperclip.copy(comment_message)
+                        time.sleep(5)
+                        # Click on the most recent post
+                        # comment_area.send_keys("letter")
+                        comment_area.send_keys(Keys.CONTROL, 'v')
+                        time.sleep(1)
+                        comment_area.send_keys(Keys.RETURN)
+
+                        # Wait to see the post after clicking
+                        time.sleep(5)  # Adjust time as needed for observation
+                        print(" Located Comment ")
+                    except:    
+                        print("An error occurred in Comment ")
 ##########################################################################################################
 
 ##########################################################################################################
 ##########################################################################################################
-    # Keep the browser open for observation
-    input("Press Enter to close this browser...") # TO_DO Try to close thread or take useful input from user
+        # Keep the browser open for observation
+        input("Press Enter to close this browser...") # TO_DO Try to close thread or take useful input from user
     
-    driver.quit()
-
+        driver.quit()
+    print(f"Browser control terminated for user: {username}")
 
 def split_excel_data(file_path, sheet_name, num_splits):
     """

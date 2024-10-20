@@ -1,0 +1,21 @@
+Accounts:
+# { 'username': 'petssparkle.009', 'password': 'petssparkle&1', 'profile': arrays[0]}, # Working # Panned
+{ 'username': 'petssparkle.06', 'password': 'petssparkle&12', 'profile': arrays[0]}, # No Message Sent # Working
+# { 'username': 'petssparkle.09', 'password': 'petssparkle&12', 'profile': arrays[0]}, # Removed Not Working  
+# { 'username': 'petssparkle.u11', 'password': 'petssparkle&11', 'profile': arrays[1]}, # No Message Sent # Working 
+# { 'username': 'bbelal.ali', 'password': 'Bolbol00curt', 'profile': arrays[1]} # Personal Account
+
+Comments:
+""" Check your DMs, Please  🌹 """
+
+""" Hello, We have a Great offer for you!  📍|@petssparkle_official🌹 """ 
+
+Messages:
+marketing_message1 = """Hello there! 🌹
+
+We hope you’re having a great day! ❤
+
+We’re the petssparkle marketing team, and we really like your profile. It looks like you could be our next spotlight model! 📸
+
+If you are interested, Kindly send "Pets Sparkle Star" in a message to our official page! 🎁🎁
+📍| @petssparkle_official"""
