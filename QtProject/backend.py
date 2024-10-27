@@ -104,7 +104,9 @@ class MyApp(QtWidgets.QMainWindow):
         self.ui.Add_pushButton.clicked.connect(self.handle_Add_Button) # If Add pushbutton is clicked go to handle_Add_Button function
         self.ui.Remove_pushButton.clicked.connect(self.handle_Remove_Button) # If Remove pushbutton is clicked go to handle_Remove_Button function
         self.ui.Check_pushButton.clicked.connect(self.handle_Check_Button) # If Check pushbutton is clicked go to handle_Check_Button function
-        self.ui.Message_checkBox.stateChanged.connect(self.on_checkbox_state_changed)
+        self.ui.Message_checkBox.stateChanged.connect(self.on_checkbox_state_changed) 
+        # Initial text
+        self.ui.Dialogue_textBrowser.setText("Welcome to the application!")
 
     def on_checkbox_state_changed(self):
         if self.ui.Message_checkBox.isChecked()== True:
@@ -317,6 +319,8 @@ def wait( type, x, y, element_no,driver): # TO_DO Check especially driver , can 
 def control_browser(username, password, profiles_array, comment_value, message_value, IsMessageChecked):
     # driver = myDRIVER
     driver = webdriver.Chrome()
+
+    no_accounts = 0
 
     # Subscription Part # TO_DO
     # while not terminate_event.is_set():
@@ -557,7 +561,7 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                 time.sleep(5)
                 likeButton.click()
                 likeButton.click()
-                time.sleep(5)
+                time.sleep(3)
             except:
                 print("Error in Like Area")
 
@@ -580,14 +584,16 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                 comment_area.send_keys(Keys.RETURN)
 
                 # Wait to see the post after clicking
-                time.sleep(5)  # Adjust time as needed for observation
+                time.sleep(3)  # Adjust time as needed for observation
 
                 print("Located Comment ")
+                no_accounts  = no_accounts + 1 
+                print(f"No of Accounts is {no_accounts}, From Account {username}")
 
             except Exception as e:
                 # print("An error occurred in Comment way 2 ")
                 try:
-                    time.sleep(15)
+                    # time.sleep(15)
                     # Locate the most recent Instagram post using the post grid
                     # Instagram posts are usually inside <a> tags with an <img> inside
                     # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
@@ -605,6 +611,8 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                     time.sleep(5)  # Adjust time as needed for observation
 
                     print(" Located Comment By Way ")
+                    no_accounts  = no_accounts + 1 
+                    print(f"No of Accounts is {no_accounts}, From Account {username}")
 
                 except Exception as e:
                     # print(f"An error occurred: {e}")
@@ -628,6 +636,8 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                         # Wait to see the post after clicking
                         time.sleep(5)  # Adjust time as needed for observation
                         print(" Located Comment ")
+                        no_accounts  = no_accounts + 1 
+                        print(f"No of Accounts is {no_accounts}, From Account {username}")
                     except:    
                         print("An error occurred in Comment ")
 ##########################################################################################################
