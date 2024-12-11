@@ -521,7 +521,7 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                 time.sleep(15)
 ########################################################################################################## 
             try:
-                time.sleep(10)
+                time.sleep(15)
                 # Locate the most recent Instagram post using the post grid
                 # Instagram posts are usually inside <a> tags with an <img> inside
                 # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
@@ -566,86 +566,86 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                 print("Error in Like Area")
 
     
-            try:
-                time.sleep(10)
-                time.sleep(5)
-                comment_area = driver.find_element(By.XPATH, "//textarea") 
+            # try:
+            #     time.sleep(10)
+            #     time.sleep(5)
+            #     comment_area = driver.find_element(By.XPATH, "//textarea") 
 
-                # Click on the most recent post
-                # comment_area.click()
-                comment_message = comment_value
-                # comment_message = """ Check your DMs, Please  🌹 """
-                pyperclip.copy(comment_message)
-                time.sleep(5)
-                # Click on the most recent post
-                # comment_area.send_keys("letter")
-                comment_area.send_keys(Keys.CONTROL, 'v')
-                time.sleep(1)
-                comment_area.send_keys(Keys.RETURN)
+            #     # Click on the most recent post
+            #     # comment_area.click()
+            #     comment_message = comment_value
+            #     # comment_message = """ Check your DMs, Please  🌹 """
+            #     pyperclip.copy(comment_message)
+            #     time.sleep(5)
+            #     # Click on the most recent post
+            #     # comment_area.send_keys("letter")
+            #     comment_area.send_keys(Keys.CONTROL, 'v')
+            #     time.sleep(1)
+            #     comment_area.send_keys(Keys.RETURN)
 
-                # Wait to see the post after clicking
-                time.sleep(3)  # Adjust time as needed for observation
+            #     # Wait to see the post after clicking
+            #     time.sleep(3)  # Adjust time as needed for observation
 
-                print("Located Comment ")
-                no_accounts  = no_accounts + 1 
-                print(f"No of Accounts is {no_accounts}, From Account {username}")
+            #     print("Located Comment ")
+            #     no_accounts  = no_accounts + 1 
+            #     print(f"No of Accounts is {no_accounts}, From Account {username}")
 
-            except Exception as e:
-                # print("An error occurred in Comment way 2 ")
-                try:
-                    # time.sleep(15)
-                    # Locate the most recent Instagram post using the post grid
-                    # Instagram posts are usually inside <a> tags with an <img> inside
-                    # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
-                    comment_area = driver.find_element(By.XPATH, "//textarea[contains(@class, 'xvbhtw8 ')]") # Working # MORE STABLE
-                    comment_message = comment_value
-                    # comment_message = """ Check your DMs, Please  🌹 """
-                    pyperclip.copy(comment_message)
-                    time.sleep(5)
-                    # Click on the most recent post
-                    # comment_area.send_keys("letter")
-                    comment_area.send_keys(Keys.CONTROL, 'v')
-                    time.sleep(1)
-                    comment_area.send_keys(Keys.RETURN)
-                    # Wait to see the post after clicking
-                    time.sleep(5)  # Adjust time as needed for observation
+            # except Exception as e:
+            #     # print("An error occurred in Comment way 2 ")
+            #     try:
+            #         # time.sleep(15)
+            #         # Locate the most recent Instagram post using the post grid
+            #         # Instagram posts are usually inside <a> tags with an <img> inside
+            #         # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
+            #         comment_area = driver.find_element(By.XPATH, "//textarea[contains(@class, 'xvbhtw8 ')]") # Working # MORE STABLE
+            #         comment_message = comment_value
+            #         # comment_message = """ Check your DMs, Please  🌹 """
+            #         pyperclip.copy(comment_message)
+            #         time.sleep(5)
+            #         # Click on the most recent post
+            #         # comment_area.send_keys("letter")
+            #         comment_area.send_keys(Keys.CONTROL, 'v')
+            #         time.sleep(1)
+            #         comment_area.send_keys(Keys.RETURN)
+            #         # Wait to see the post after clicking
+            #         time.sleep(5)  # Adjust time as needed for observation
 
-                    print(" Located Comment By Way ")
-                    no_accounts  = no_accounts + 1 
-                    print(f"No of Accounts is {no_accounts}, From Account {username}")
+            #         print(" Located Comment By Way ")
+            #         no_accounts  = no_accounts + 1 
+            #         print(f"No of Accounts is {no_accounts}, From Account {username}")
 
-                except Exception as e:
-                    # print(f"An error occurred: {e}")
-                    # print("An error occurred in Comment way 3 ")
-                    try:
-                        CommentElement = wait("textarea" ,"aria-label" , "Add a comment..." , 0,driver)
+            #     except Exception as e:
+            #         # print(f"An error occurred: {e}")
+            #         # print("An error occurred in Comment way 3 ")
+            #         try:
+            #             CommentElement = wait("textarea" ,"aria-label" , "Add a comment..." , 0,driver)
 
-                        # print(CommentElement)
-                        CommentPath = get_xpath(CommentElement)
-                        comment_area = driver.find_element(By.XPATH, CommentPath)
-                        # comment_message = """ Check your DMs, Please  🌹 """
-                        comment_message = comment_value
-                        pyperclip.copy(comment_message)
-                        time.sleep(5)
-                        # Click on the most recent post
-                        # comment_area.send_keys("letter")
-                        comment_area.send_keys(Keys.CONTROL, 'v')
-                        time.sleep(1)
-                        comment_area.send_keys(Keys.RETURN)
+            #             # print(CommentElement)
+            #             CommentPath = get_xpath(CommentElement)
+            #             comment_area = driver.find_element(By.XPATH, CommentPath)
+            #             # comment_message = """ Check your DMs, Please  🌹 """
+            #             comment_message = comment_value
+            #             pyperclip.copy(comment_message)
+            #             time.sleep(5)
+            #             # Click on the most recent post
+            #             # comment_area.send_keys("letter")
+            #             comment_area.send_keys(Keys.CONTROL, 'v')
+            #             time.sleep(1)
+            #             comment_area.send_keys(Keys.RETURN)
 
-                        # Wait to see the post after clicking
-                        time.sleep(5)  # Adjust time as needed for observation
-                        print(" Located Comment ")
-                        no_accounts  = no_accounts + 1 
-                        print(f"No of Accounts is {no_accounts}, From Account {username}")
-                    except:    
-                        print("An error occurred in Comment ")
+            #             # Wait to see the post after clicking
+            #             time.sleep(5)  # Adjust time as needed for observation
+            #             print(" Located Comment ")
+            #             no_accounts  = no_accounts + 1 
+            #             print(f"No of Accounts is {no_accounts}, From Account {username}")
+            #         except:    
+            #             print("An error occurred in Comment ")
 ##########################################################################################################
 
 ##########################################################################################################
 ##########################################################################################################
         # Keep the browser open for observation
-        input("Press Enter to close this browser...") # TO_DO Try to close thread or take useful input from user
+        # input("Press Enter to close this browser...") # TO_DO Try to close thread or take useful input from user
     
         driver.quit()
     print(f"Browser control terminated for user: {username}")
