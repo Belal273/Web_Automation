@@ -369,7 +369,7 @@ def control_browser(username, password, profiles_array, comment_value, message_v
             login_button.click()  # Click the Log In button
 
             # Wait for a few seconds 
-            time.sleep(10)
+            time.sleep(8)
         except:
             print("Can't Log In")
             return
@@ -377,7 +377,7 @@ def control_browser(username, password, profiles_array, comment_value, message_v
 
 #######################################################################################################
         # Wait for a few seconds
-        time.sleep(10)
+        time.sleep(8)
         for i in range(len(profiles_array)):
             # Subscription Part # TO_DO
             # Put periodaically inside code , each couple of lines
@@ -392,6 +392,7 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                 print(f"Success: Customer Profile Page {profiles_array[i][0]}, From Account {username}")
             except:
                 print(f"Failed: Can't get Customer Profile Page {profiles_array[i][0]}, From Account {username}")
+                continue
 
             try:
                 following_button = driver.find_element(By.XPATH, "//div[contains(text(), 'Following')]") # Working
@@ -410,7 +411,7 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                     print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
                     print("Clicked 'Follow' button.")
                     # Wait for a few seconds
-                    time.sleep(10)
+                    time.sleep(8)
         
 
                 except:
@@ -432,11 +433,12 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                 except:
                     print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
                     print(" Error in 'Message' button.") # Print more information # TO_DO
+                    continue
         
 
         
                 try:
-                    time.sleep(20)
+                    time.sleep(15)
                     # Locate POP Up Message using the provided XPath and click it
                     pop_up_message_button = driver.find_element(By.XPATH, "//button[contains(text(), 'Not Now')]") 
                     # pop_up_message_button = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
@@ -446,11 +448,11 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                     print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
                     print("Clicked Not Now in the pop up message")
                     # # Wait for a few seconds
-                    time.sleep(10)
+                    time.sleep(8)
 
                 except:
                     try:
-                        time.sleep(20)
+                        time.sleep(15)
                         # Locate POP Up Message using the provided XPath and click it
                         pop_up_message_button2 = driver.find_element(By.XPATH, "//button[contains(text(), 'Turn On')]") 
                         # pop_up_message_button2 = driver.find_element(By.XPATH, "//button[text()='Not Now']") 
@@ -460,14 +462,14 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                         print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
                         print("Clicked Not Now in the pop up message2")
                         # # Wait for a few seconds
-                        time.sleep(10)
+                        time.sleep(8)
 
                     except:
                         print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
                         print(" Error in Clicking pop up message2.") 
 
                 try:
-                    time.sleep(10)        
+                    time.sleep(8)        
                     # Locate the Send Message Textbox using the provided XPath and click it
                     message_txtBox = driver.find_element(By.CSS_SELECTOR, "div[role='textbox']") #Working # TO_DO # Improve 
                     # time.sleep(20)       
@@ -490,10 +492,10 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                 # | @petssparkle"""
         
                     pyperclip.copy(marketing_message1)
-                    time.sleep(5)
+                    time.sleep(3)
                     message_txtBox.click()  # Click to focus the text box
                     message_txtBox.send_keys(Keys.CONTROL, 'v')  # Paste the clipboard content 
-                    time.sleep(5)
+                    time.sleep(3)
             
                 # for letter in marketing_message:
                 #     message_txtBox.send_keys(letter)  # Send each letter
@@ -501,7 +503,7 @@ def control_browser(username, password, profiles_array, comment_value, message_v
 
                     # Press the Enter key
                     message_txtBox.send_keys(Keys.RETURN)
-                    time.sleep(5)
+                    time.sleep(3)
                     print(f"Regarding user profile: {profiles_array[i][0]} , From Account {username}") #TO_DO # Add thread number and more information
                     print("Sending Message Successfully") # Print more information # TO_DO
             
@@ -514,14 +516,14 @@ def control_browser(username, password, profiles_array, comment_value, message_v
                     # Navigate to client profile page
                     driver.get(f"https://www.instagram.com/{profiles_array[i][0]}/")
                     # Wait for the page to load and be visible (adjust the sleep time as necessary)
-                    time.sleep(15)
+                    time.sleep(8)
                     print(f"Success: Customer Profile Page {profiles_array[i][0]}, From Account {username}")
                 except:
                     print(f"Failed: Can't get Customer Profile Page {profiles_array[i][0]}, From Account {username}")
-                time.sleep(15)
+                time.sleep(8)
 ########################################################################################################## 
             try:
-                time.sleep(15)
+                time.sleep(8)
                 # Locate the most recent Instagram post using the post grid
                 # Instagram posts are usually inside <a> tags with an <img> inside
                 # most_recent_post = driver.find_element(By.XPATH, "//article//img") 
